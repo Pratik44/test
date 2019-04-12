@@ -1,16 +1,22 @@
 package main
+
 import (
- "fmt"
- "net/http"
- "os"
+    "fmt"
+    "html"
+    "log"
+    "net/http"
 )
+
 func main() {
- var PORT string
- if PORT = os.Getenv("PORT"); PORT == "" {
-  PORT = "8080"
- }
- http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-  fmt.Fprintf(w, "Hello World from path: %s\n", r.URL.Path)
- })
- http.ListenAndServe(":" + PORT, nil)
+
+    http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+        fmt.Fprintf(w, "Hello, %q", html.EscapeString(r.URL.Path))
+    })
+
+    http.HandleFunc("/hi", func(w http.ResponseWriter, r *http.Request){
+        fmt.Fprintf(w, "Hi")
+    })
+
+    log.Fatal(http.ListenAndServe(":8081", nil))
+
 }
